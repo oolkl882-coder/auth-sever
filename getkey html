@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>get key</title>
+<style>
+body{background:#0d0d0f;color:#e6e6e6;font-family:system-ui;padding:20px;margin:0}
+h3{margin-top:0}
+input,button{width:100%;padding:14px;margin:8px 0;border-radius:10px;border:1px solid #2f2f36;background:#0f0f12;color:#e6e6e6;box-sizing:border-box;font-size:15px}
+button{background:#7c5cff;border:none;font-weight:600;color:white}
+.key{background:#0f0f12;padding:14px;border-radius:10px;font-family:monospace;word-break:break-all;margin-top:14px;border:1px dashed #7c5cff;color:#b9a5ff}
+</style>
+</head>
+<body>
+<h3>lấy key</h3>
+<input id="n" placeholder="tên / discord của bạn">
+<button onclick="g()">lấy key</button>
+<div id="o"></div>
+<script>
+async function g(){
+  const n = document.getElementById('n').value.trim();
+  if(!n) return alert('nhập tên');
+  const r = await fetch('/public/gen', {
+    method:'POST',
+    headers:{'content-type':'application/json'},
+    body: JSON.stringify({name:n})
+  });
+  const d = await r.json();
+  if(d.error) return document.getElementById('o').innerHTML = '<div style="color:#ff7070">'+d.error+'</div>';
+  document.getElementById('o').innerHTML = '<div class="key">'+d.key+'</div><div style="font-size:12px;opacity:.6;margin-top:8px">hết hạn: '+new Date(d.expires_at).toLocaleString()+'</div>';
+}
+</script>
+</body>
+</html>
